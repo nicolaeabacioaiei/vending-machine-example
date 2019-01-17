@@ -1,8 +1,8 @@
 # Vending machine project
 
 ## Preview:
-Bine ai venit!
-Cod  Produs	 Pret 	Gramaj
+Bine ai venit! \n
+Cod  Produs	 Pret 	Gramaj \n
 101	Cola		3	0,5L
 102	Fanta		3	0,5L
 103	Apa		2	1L
