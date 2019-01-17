@@ -23,7 +23,7 @@ public class VendingMachine {
      * Display the menu products to the user.
      */
     public void displayMenu() {
-        ioService.displayMessage("Bien ai venit!");
+        ioService.displayMessage("Bine ai venit!");
         ioService.displayMessage("Cod  Produs\t Pret \tGramaj");
         for (Product product : productStock.keySet()) {
             ioService.displayMessage(product.getCod() + "\t" + product.getName() + "\t\t" + product.getPrice() + "\t" + product.getSize());
