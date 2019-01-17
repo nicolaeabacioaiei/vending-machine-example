@@ -1,15 +1,5 @@
 # Vending machine project
 
-## Preview:
-Bine ai venit! \n
-Cod  Produs	 Pret 	Gramaj \n
-101	Cola		3	0,5L
-102	Fanta		3	0,5L
-103	Apa		2	1L
-104	Ciocolata		5	100g
-0 - iesire
-Alege un produs:
-
 ## Technologies used:
 ### Java
 ### Maven
