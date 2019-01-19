@@ -1,6 +1,6 @@
 package com.yonder.vm.model;
 
-public class Coin {
+public class Coin implements Comparable<Coin>{
 
     private Integer cod;
     private Integer value;
@@ -24,5 +24,10 @@ public class Coin {
 
     public void setCod(Integer cod) {
         this.cod = cod;
+    }
+
+    @Override
+    public int compareTo(Coin coin) {
+        return coin.value.compareTo(this.value);
     }
 }

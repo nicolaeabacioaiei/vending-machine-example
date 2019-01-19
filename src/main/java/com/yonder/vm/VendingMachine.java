@@ -12,10 +12,11 @@ public class VendingMachine {
 
     private CurrencyType currency;
     private Map<Product, Integer> productStock;
-    private Map<Coin, Integer> coinStock;
+    private TreeMap<Coin, Integer> coinStock;
 
     private transient IoService ioService;
     private transient DbService dbService;
+
 
     public VendingMachine(){}
 
@@ -26,7 +27,7 @@ public class VendingMachine {
         ioService.displayMessage("Bine ai venit!");
         ioService.displayMessage("Cod  Produs\t Pret \tGramaj");
         for (Product product : productStock.keySet()) {
-            ioService.displayMessage(product.getCod() + "\t" + product.getName() + "\t\t" + product.getPrice() + "\t" + product.getSize());
+            ioService.displayMessage(product.getCod() + "\t" + product.getName() + "\t\t" + product.getPrice()+currency + "\t" + product.getSize());
         }
         ioService.displayMessage("0 - iesire");
     }
@@ -37,7 +38,7 @@ public class VendingMachine {
     public void displayCoinStock() {
         ioService.displayMessage("Cod  Valoare");
         for (Coin coin : coinStock.keySet()) {
-            ioService.displayMessage(coin.getCod() + "  " + coin.getValue());
+            ioService.displayMessage(coin.getCod() + "  " + coin.getValue()+currency);
         }
     }
 
@@ -97,11 +98,10 @@ public class VendingMachine {
             if (p.getCod() == option) {
                 Integer quantity = productStock.get(p);
                 if (quantity > 0) {
-                    ok = true;
                     return p;
                 } else {
                     ioService.displayMessage("Nu sunt produse suficiente.");
-                    break;
+                    return this.buyProduct();
                 }
             }
         }
@@ -117,22 +117,26 @@ public class VendingMachine {
      * @param rest
      */
     public void payRest(Integer rest) {
-        for (Coin coin : coinStock.keySet()) {
-            while (coin.getValue() <= rest) {
-                if (coinStock.get(coin) > 0) {
-                    ioService.displayMessage("Paying rest " + coin.getValue() + " " + currency);
-                    coinStock.put(coin, coinStock.get(coin) - 1);
-                    rest = rest - coin.getValue();
-                } else {
-                    break;
+        if(rest == 0){
+            ioService.displayMessage("Nu este rest de dat.");
+        }else {
+            for (Coin coin : coinStock.keySet()) {
+                while (coin.getValue() <= rest) {
+                    if (coinStock.get(coin) > 0) {
+                        ioService.displayMessage("Paying rest " + coin.getValue() + " " + currency);
+                        coinStock.put(coin, coinStock.get(coin) - 1);
+                        rest = rest - coin.getValue();
+                    } else {
+                        break;
+                    }
                 }
             }
-        }
-        if (rest == 0) {
-            ioService.displayMessage("Rest dat cu succes!");
-        } else {
-            ioService.displayMessage("Nu sunt destule monede pentru rest");
-            ioService.displayMessage("Rest ramas: " + rest);
+            if (rest == 0) {
+                ioService.displayMessage("Rest dat cu succes!");
+            } else {
+                ioService.displayMessage("Nu sunt destule monede pentru rest");
+                ioService.displayMessage("Rest ramas: " + rest);
+            }
         }
     }
 
@@ -146,6 +150,7 @@ public class VendingMachine {
             this.displayCoinStock();
             Integer sum = this.insertCoins(product.getPrice());
             this.deliverProduct(product);
+            //buy another product
             this.payRest(sum - product.getPrice());
             //save the VM
             dbService.write(this);
